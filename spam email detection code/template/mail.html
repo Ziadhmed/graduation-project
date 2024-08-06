@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+textarea {
+    height: 400px;
+    width: 800px;
+    text-align: left;
+}
+form {
+    text-align: center;
+}
+#lengthfont {
+ font-size: 100px;
+}
+</style>
+<link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css" />
+<script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
+<script>
+    // Fetch email data from the Flask API
+    fetch('/emails')
+        .then(response => response.json())
+        .then(data => {
+            // Update the textarea with the fetched email data
+            document.getElementById('freeform').value = JSON.stringify(data, null, 4);
+        })
+        .catch(error => console.error('Error fetching email data:', error));
+</script>
+</head>
+<body>
+<h1 style="text-align:center;">Suspicious E-mail detection</h1>
+<form action="{{url_for('predict')}}" method="post">
+    <label for="freeform">Insert your mail to check if spam or legitimate:</label><br>
+    <textarea id="freeform" name="freeform" placeholder="Enter text message here....." rows="5" cols="50"></textarea><br>
+    <button type="submit" class="btn btn-primary btn-block btn-large">Predict</button>
+</form>
+<br>
+<br>
+<br>
+<div id="lengthfont">
+         {{prediction_text}}
+        </div>
+
+</body>
+</html>
